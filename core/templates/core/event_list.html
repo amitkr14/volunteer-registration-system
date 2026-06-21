@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upcoming Events - VolunTrack</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet"/>
+</head>
+<body class="bg-slate-50 font-sans antialiased min-h-screen flex flex-col">
+
+    <nav class="bg-white border-b border-slate-200 h-16 flex items-center px-6 justify-between shrink-0 shadow-sm">
+        <div class="flex items-center gap-3">
+            <div class="h-8 w-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+                <i class="ri-heart-pulse-fill text-white text-lg"></i>
+            </div>
+            <span class="font-bold text-xl tracking-wide text-slate-900">VolunTrack</span>
+        </div>
+        
+        <div class="flex items-center gap-4">
+            <span class="text-sm font-medium text-slate-600 hidden sm:block">Hello, {{ request.user.first_name|default:request.user.username }}</span>
+            <a href="{% url 'logout' %}" class="text-slate-500 hover:text-rose-500 transition-colors" title="Logout">
+                <i class="ri-logout-circle-r-line text-2xl"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-1 max-w-5xl w-full mx-auto p-6 mt-4">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold text-slate-900">Upcoming Opportunities</h1>
+            <p class="text-slate-500 mt-2">Browse and register for upcoming volunteer events in your area.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for event in events %}
+            <div class="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow overflow-hidden flex flex-col">
+                <div class="h-32 bg-slate-100 flex items-center justify-center text-slate-300">
+                    <i class="ri-image-line text-4xl"></i>
+                </div>
+                <div class="p-5 flex-1 flex flex-col">
+                    <div class="flex justify-between items-start mb-2">
+                        <h3 class="text-lg font-bold text-slate-900 leading-tight">{{ event.title }}</h3>
+                    </div>
+                    <div class="space-y-2 mt-2 flex-1">
+                        <p class="text-sm text-slate-600 flex items-center gap-2">
+                            <i class="ri-calendar-event-line text-indigo-500"></i>
+                            {{ event.date|date:"F d, Y" }}
+                        </p>
+                        <p class="text-sm text-slate-600 flex items-center gap-2">
+                            <i class="ri-time-line text-indigo-500"></i>
+                            {{ event.date|time:"h:i A" }}
+                        </p>
+                        <p class="text-sm text-slate-600 flex items-center gap-2">
+                            <i class="ri-group-line text-indigo-500"></i>
+                            {{ event.capacity }} open slots
+                        </p>
+                    </div>
+                    
+                    <button class="w-full mt-6 bg-indigo-50 hover:bg-indigo-600 text-indigo-600 hover:text-white border border-indigo-200 hover:border-indigo-600 font-semibold py-2 px-4 rounded-lg transition-colors">
+                        Register for Event
+                    </button>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-span-full py-12 text-center bg-white rounded-xl border border-slate-200 border-dashed">
+                <i class="ri-calendar-check-line text-4xl text-slate-300 mb-3 block"></i>
+                <h3 class="text-lg font-medium text-slate-900">No events currently scheduled</h3>
+                <p class="text-slate-500 text-sm mt-1">Check back later for new volunteer opportunities!</p>
+            </div>
+            {% endfor %}
+        </div>
+    </main>
+
+</body>
+</html>
